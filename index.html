@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f3ed" />
+    <meta name="description" content="La Remise, le catalogue d’outils partagés entre coopératives d’habitation." />
+    <title>La Remise — les outils circulent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#catalogue" aria-label="La Remise, accueil">
+        <span class="brand-mark" aria-hidden="true">R<span>.</span></span>
+        <span class="brand-name">la remise</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation principale">
+        <button class="nav-link is-active" data-view="catalogue">Le catalogue <span id="nav-count">00</span></button>
+        <button class="nav-link" data-view="reservations">Mes réservations <span id="reservation-count">00</span></button>
+        <button class="nav-link" data-view="requests">Demandes <span id="request-count">00</span></button>
+        <button class="nav-link" data-view="trainings">Formations <span id="training-count">00</span></button>
+      </nav>
+      <div class="header-actions">
+        <button class="request-button" id="open-request" aria-label="Demander un outil" title="Demander un outil"><span aria-hidden="true">↗</span><span class="button-label">Demander un outil</span></button>
+        <button class="add-button" id="open-add" aria-label="Ajouter un outil" title="Ajouter un outil"><span aria-hidden="true">＋</span><span class="button-label">Ajouter un outil</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="live-dot"></span> LE GARAGE COMMUN · MONTRÉAL</p>
+          <h1 id="page-title">Les bons outils<br />ne restent pas <em>rangés.</em></h1>
+          <p class="intro-note">D’une coop à l’autre, on se prête plus que des outils.</p>
+        </div>
+        <div class="intro-aside" aria-label="Statistiques du catalogue">
+          <div class="stat"><strong id="tool-total">00</strong><span>outils en circulation</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><strong id="request-total">00</strong><span>demandes d’emprunt</span></div>
+          <span class="intro-stamp" aria-hidden="true">ON<br />PARTAGE<br />ÇA<span>↗</span></span>
+        </div>
+        <span class="intro-scribble" aria-hidden="true">✳</span>
+      </section>
+
+      <section class="catalogue-section" id="catalogue" aria-label="Catalogue des outils">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow section-kicker">À EMPRUNTER PRÈS DE CHEZ VOUS</p>
+            <h2>Le tour du garage <span id="result-count">06 outils</span></h2>
+          </div>
+          <label class="search-box">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <span class="sr-only">Rechercher un outil ou une coopérative</span>
+            <input id="search-input" type="search" placeholder="Un outil, une coop…" autocomplete="off" />
+            <kbd>/</kbd>
+          </label>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filtrer par catégorie">
+          <button class="filter-chip is-selected" data-category="Tous">Tout voir <span id="all-count">00</span></button>
+          <button class="filter-chip" data-category="Électricité">Électricité</button>
+          <button class="filter-chip" data-category="Jardin">Jardin</button>
+          <button class="filter-chip" data-category="Menuiserie">Menuiserie</button>
+          <button class="filter-chip" data-category="Peinture">Peinture</button>
+          <span class="filter-note"><span aria-hidden="true">↳</span> À deux pas, à partager</span>
+        </div>
+
+        <div class="tool-grid" id="tool-grid" aria-live="polite"></div>
+        <div class="training-callout">
+          <div>
+            <p class="eyebrow section-kicker">APPRENDRE ENSEMBLE</p>
+            <p>Une formation utile à la coop? Proposez-la à la communauté.</p>
+          </div>
+          <button class="text-button" id="open-training">Proposer une formation ↗</button>
+        </div>
+        <div class="empty-state" id="empty-state" hidden>
+          <span aria-hidden="true">⌕</span>
+          <h3 id="empty-title">Aucun outil dans le catalogue.</h3>
+          <p id="empty-copy">Les membres peuvent ajouter leurs outils; toute personne peut demander un outil.</p>
+          <div class="empty-actions">
+            <button class="text-button" id="empty-add">Ajouter un outil ↗</button>
+            <button class="text-button" id="empty-request">Demander un outil ↗</button>
+            <button class="text-button" id="reset-filters" hidden>Voir tous les outils ↗</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="reservations-section" id="reservations" hidden>
+        <div class="section-heading reservation-heading">
+          <div>
+            <p class="eyebrow section-kicker">VOTRE CARNET DE PRÊTS</p>
+            <h2>Mes réservations <span id="reservation-subtitle">0 emprunt</span></h2>
+          </div>
+          <button class="back-link" data-view="catalogue">← Retour au catalogue</button>
+        </div>
+        <div class="reservation-list" id="reservation-list"></div>
+        <div class="empty-state reservation-empty" id="reservation-empty">
+          <span aria-hidden="true">↗</span>
+          <h3>Votre prochain projet commence ici.</h3>
+          <p>Choisissez un outil dans le catalogue et réservez vos dates.</p>
+          <button class="text-button" data-view="catalogue">Parcourir les outils ↗</button>
+        </div>
+      </section>
+
+      <section class="requests-section" id="requests" hidden>
+        <div class="section-heading reservation-heading">
+          <div>
+            <p class="eyebrow section-kicker">LES BESOINS DE LA COMMUNAUTÉ</p>
+            <h2>Demandes d’emprunt <span id="request-subtitle">0 demande</span></h2>
+          </div>
+          <button class="back-link" data-view="catalogue">← Retour au catalogue</button>
+        </div>
+        <div class="request-list" id="request-list"></div>
+        <div class="empty-state request-empty" id="request-empty">
+          <span aria-hidden="true">↗</span>
+          <h3>Aucune demande pour le moment.</h3>
+          <p>Les demandes déposées par les voisins apparaîtront ici.</p>
+        </div>
+      </section>
+
+      <section class="requests-section" id="training-proposals" hidden>
+        <div class="section-heading reservation-heading">
+          <div>
+            <p class="eyebrow section-kicker">APPRENTISSAGES À ORGANISER</p>
+            <h2>Propositions de formation <span id="training-subtitle">0 proposition</span></h2>
+          </div>
+          <button class="back-link" data-view="catalogue">← Retour au catalogue</button>
+        </div>
+        <div class="request-list" id="training-list"></div>
+        <div class="empty-state request-empty" id="training-empty">
+          <span aria-hidden="true">↗</span>
+          <h3>Aucune proposition pour le moment.</h3>
+          <p>Les nouvelles idées de formation apparaîtront ici.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <a class="brand footer-brand" href="#catalogue"><span class="brand-mark" aria-hidden="true">R<span>.</span></span><span class="brand-name">la remise</span></a>
+      <p>Moins d’objets qui dorment. Plus de projets qui démarrent.</p>
+      <span class="footer-location">FAIT POUR LES COOPS · 2026</span>
+    </footer>
+
+    <dialog class="app-dialog" id="reserve-dialog" aria-labelledby="reserve-title">
+      <form id="reserve-form" class="dialog-form">
+        <button class="dialog-close" type="button" data-close aria-label="Fermer">×</button>
+        <p class="eyebrow section-kicker">ON S’ORGANISE</p>
+        <h2 id="reserve-title">Réserver cet outil</h2>
+        <p class="dialog-tool-name" id="reserve-tool-name"></p>
+        <p class="member-notice">Prêt gratuit, réservé aux membres de la coopérative.</p>
+        <input type="hidden" id="reserve-tool-id" />
+        <label class="member-confirm"><input name="isMember" type="checkbox" required /><span>Je confirme être membre de la coopérative.</span></label>
+        <p class="training-notice" id="training-notice" hidden></p>
+        <label class="member-confirm" id="training-confirm" hidden><input id="has-training" name="hasTraining" type="checkbox" /><span>Je confirme avoir suivi cette formation.</span></label>
+        <label>Votre prénom<input id="borrower-name" name="name" required maxlength="40" placeholder="Ex. Camille" autocomplete="given-name" /></label>
+        <div class="date-fields">
+          <label>Du<input id="reserve-start" name="start" type="date" required /></label>
+          <label>Au<input id="reserve-end" name="end" type="date" required /></label>
+        </div>
+        <label>Un mot pour la coop <span class="optional">facultatif</span><textarea id="reserve-note" name="note" rows="2" maxlength="180" placeholder="Votre projet, une question…"></textarea></label>
+        <p class="form-error" id="reserve-error" role="alert"></p>
+        <button class="submit-button" type="submit">Confirmer la réservation <span aria-hidden="true">↗</span></button>
+      </form>
+    </dialog>
+
+    <dialog class="app-dialog" id="add-dialog" aria-labelledby="add-title">
+      <form id="add-form" class="dialog-form">
+        <button class="dialog-close" type="button" data-close aria-label="Fermer">×</button>
+        <p class="eyebrow section-kicker">ÇA PEUT SERVIR À QUELQU’UN</p>
+        <h2 id="add-title">Mettre un outil en circulation</h2>
+        <p class="member-notice">L’ajout d’un outil est réservé aux membres.</p>
+        <label class="member-confirm"><input name="isMember" type="checkbox" required /><span>Je confirme être membre de la coopérative.</span></label>
+        <label>Nom de l’outil<input name="name" required maxlength="60" placeholder="Ex. Perceuse à percussion" /></label>
+        <label class="form-check"><input name="requiresTraining" type="checkbox" /><span>Une formation est requise pour emprunter cet outil.</span></label>
+        <div id="training-name-field" hidden><label>Formation requise<input name="trainingName" maxlength="80" placeholder="Ex. Utilisation sécuritaire de la scie" /></label></div>
+        <div class="date-fields">
+          <label>Catégorie<select name="category" required><option value="Électricité">Électricité</option><option value="Jardin">Jardin</option><option value="Menuiserie">Menuiserie</option><option value="Peinture">Peinture</option><option value="Autre">Autre</option></select></label>
+          <label>Votre coop<input name="coop" required maxlength="50" placeholder="Coopérative du Parc" /></label>
+        </div>
+        <label>Une petite description<textarea name="description" rows="2" required maxlength="160" placeholder="État, accessoires inclus…"></textarea></label>
+        <label>Lien vers une photo <span class="optional">facultatif</span><input name="image" type="url" placeholder="https://…" /></label>
+        <p class="form-error" id="add-error" role="alert"></p>
+        <button class="submit-button" type="submit">Ajouter au catalogue <span aria-hidden="true">↗</span></button>
+      </form>
+    </dialog>
+    <dialog class="app-dialog" id="request-dialog" aria-labelledby="request-title">
+      <form id="request-form" class="dialog-form">
+        <button class="dialog-close" type="button" data-close aria-label="Fermer">×</button>
+        <p class="eyebrow section-kicker">UN BESOIN À PARTAGER</p>
+        <h2 id="request-title">Demander un outil</h2>
+        <p class="dialog-tool-name">Cette demande est ouverte à tout le monde.</p>
+        <label>Quel outil souhaitez-vous emprunter?<input name="toolName" required maxlength="60" placeholder="Ex. Une perceuse" /></label>
+        <label>Votre prénom<input name="name" required maxlength="40" placeholder="Ex. Camille" autocomplete="given-name" /></label>
+        <label>Votre coopérative ou quartier<input name="coop" required maxlength="60" placeholder="Ex. Coopérative du Parc" /></label>
+        <label>Pour vous joindre<input name="contact" required maxlength="100" placeholder="Courriel ou téléphone" autocomplete="email" /></label>
+        <label>Précisions <span class="optional">facultatif</span><textarea name="details" rows="2" maxlength="180" placeholder="Dates souhaitées, projet…"></textarea></label>
+        <p class="form-error" id="request-error" role="alert"></p>
+        <button class="submit-button" type="submit">Envoyer ma demande <span aria-hidden="true">↗</span></button>
+      </form>
+    </dialog>
+    <dialog class="app-dialog" id="training-dialog" aria-labelledby="training-title">
+      <form id="training-form" class="dialog-form">
+        <button class="dialog-close" type="button" data-close aria-label="Fermer">×</button>
+        <p class="eyebrow section-kicker">APPRENDRE ENSEMBLE</p>
+        <h2 id="training-title">Proposer une formation</h2>
+        <p class="dialog-tool-name">Toute personne peut proposer une formation.</p>
+        <label>Formation proposée<input name="title" required maxlength="80" placeholder="Ex. Initiation à la menuiserie" /></label>
+        <label>Outil ou sujet concerné<input name="subject" required maxlength="80" placeholder="Ex. Scie circulaire, sécurité en atelier" /></label>
+        <label>Votre prénom<input name="name" required maxlength="40" placeholder="Ex. Camille" autocomplete="given-name" /></label>
+        <label>Votre coopérative ou quartier<input name="coop" required maxlength="60" placeholder="Ex. Coopérative du Parc" /></label>
+        <label>Pour vous joindre<input name="contact" required maxlength="100" placeholder="Courriel ou téléphone" autocomplete="email" /></label>
+        <label>Quelques détails <span class="optional">facultatif</span><textarea name="details" rows="2" maxlength="180" placeholder="Format souhaité, expérience proposée…"></textarea></label>
+        <p class="form-error" id="training-error" role="alert"></p>
+        <button class="submit-button" type="submit">Envoyer la proposition <span aria-hidden="true">↗</span></button>
+      </form>
+    </dialog>
+    <dialog class="app-dialog" id="member-gate-dialog" aria-labelledby="member-gate-title">
+      <form id="member-gate-form" class="dialog-form">
+        <button class="dialog-close" type="button" data-close aria-label="Fermer">×</button>
+        <p class="eyebrow section-kicker">ESPACE MEMBRE</p>
+        <h2 id="member-gate-title">Voir les demandes reçues</h2>
+        <label class="member-confirm"><input name="isMember" type="checkbox" required /><span>Je confirme être membre de la coopérative.</span></label>
+        <p class="form-error" id="member-gate-error" role="alert"></p>
+        <button class="submit-button" type="submit">Continuer <span aria-hidden="true">↗</span></button>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
