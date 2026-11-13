@@ -11,3 +11,4 @@ Les outils, réservations, demandes et propositions de formation sont enregistr�
 ## Accès membres
 
 Aucun code ni compte n'est demandé. Les actions réservées aux membres reposent sur une simple confirmation d'adhésion. Comme le site est statique, cette confirmation ne vérifie pas réellement l'adhésion; une vérification fiable nécessite un serveur et une authentification.
+Ajouter deux exemples d'Outils disponible dans le catalogue
