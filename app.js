@@ -1,5 +1,26 @@
-const DEMO_TOOL_IDS = new Set(["outil-1", "outil-2", "outil-3", "outil-4", "outil-5", "outil-6"]);
 const FALLBACK_TOOL_IMAGE = "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=900&q=85";
+const DEFAULT_TOOLS = [
+  {
+    id: "example-perceuse",
+    name: "Perceuse-visseuse",
+    category: "Électricité",
+    coop: "Coop de l'Alternative",
+    description: "Parfaite pour monter des étagères, fixer des planches et bricoler sans devoir tout acheter.",
+    image: "https://images.unsplash.com/photo-1581147036324-c17ac6bb9b3f?auto=format&fit=crop&w=900&q=80",
+    requiresTraining: false,
+    trainingName: ""
+  },
+  {
+    id: "example-tailleuse",
+    name: "Tailleuse de pelouse",
+    category: "Jardin",
+    coop: "Maraîchage partagé",
+    description: "Idéale pour entretenir les espaces verts en commun sans acheter un équipement coûteux.",
+    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=900&q=80",
+    requiresTraining: true,
+    trainingName: "Utilisation et sécurité"
+  }
+];
 
 const storage = {
   read(key, fallback) {
@@ -19,8 +40,9 @@ const storage = {
   }
 };
 
-const storedTools = storage.read("la-remise-tools", []);
-let tools = storedTools.filter((tool) => !DEMO_TOOL_IDS.has(tool.id));
+const storedTools = storage.read("la-remise-tools", null);
+let tools = Array.isArray(storedTools) && storedTools.length ? storedTools : DEFAULT_TOOLS.slice();
+if (!Array.isArray(storedTools) || storedTools.length === 0) storage.write("la-remise-tools", tools);
 const storedReservations = storage.read("la-remise-reservations", []);
 let reservations = storedReservations.filter((reservation) => !DEMO_TOOL_IDS.has(reservation.toolId));
 let requests = storage.read("la-remise-requests", []);
